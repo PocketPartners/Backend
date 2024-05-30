@@ -7,7 +7,9 @@ import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.Passwo
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.PersonName;
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.PhoneNumber;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
 
+@Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
 
     @Embedded

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 @Embeddable
 public record PhoneNumber(
         @NotBlank
-        @Size(min = 10, max = 15) // Ajusta el tamaño según tus requisitos
+        @Size(min = 9, max = 13) // Ajusta el tamaño según tus requisitos
         @Pattern(regexp = "^\\+?[0-9]*$", message = "Phone number must contain only digits and optionally start with a '+'")
         String number
 ) {
@@ -19,8 +19,8 @@ public record PhoneNumber(
         if (!number.matches("^\\+?[0-9]*$")) {
             throw new IllegalArgumentException("Phone number must contain only digits and optionally start with a '+'");
         }
-        if (number.length() < 10 || number.length() > 15) {
-            throw new IllegalArgumentException("Phone number must be between 10 and 15 characters long");
+        if (number.length() < 9 || number.length() > 13) {
+            throw new IllegalArgumentException("Phone number must be between 9 and 13 characters long");
         }
     }
 
