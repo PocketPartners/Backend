@@ -2,6 +2,8 @@ package fairfinance.pocketpartners.backend.expenses.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.expenses.domain.model.queries.GetAllExpensesQuery;
 import fairfinance.pocketpartners.backend.expenses.domain.model.queries.GetExpenseByIdQuery;
+import fairfinance.pocketpartners.backend.expenses.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.expenses.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseQueryService;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.CreateExpenseResource;
@@ -33,7 +35,9 @@ public class ExpensesController {
     @PostMapping
     public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
         var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
-        var expense = expenseCommandService.handle(createExpenseCommand);
+        var expenseId = expenseCommandService.handle(createExpenseCommand);
+        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserId(new ExpenseName(resource.name()), resource.userId());
+        var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
         return new ResponseEntity<>(expenseResource, HttpStatus.CREATED);

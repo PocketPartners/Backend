@@ -5,6 +5,7 @@ import fairfinance.pocketpartners.backend.expenses.domain.model.commands.CreateE
 import fairfinance.pocketpartners.backend.expenses.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.expenses.infrastructure.persistence.jpa.repositories.ExpenseRepository;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,21 @@ import java.util.Optional;
 public class ExpenseCommandServiceImpl implements ExpenseCommandService {
 
     private final ExpenseRepository expenseRepository;
+    private final UserRepository userRepository;
 
-    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserRepository userRepository) {this.expenseRepository = expenseRepository;}
+    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserRepository userRepository) {
+        this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
+    }
 
-    @Override
-    public Optional<Expense> handle(CreateExpenseCommand command) {
-        var name = new ExpenseName(command.name());
-        expenseRepository.findByName(name).map(expense -> {
-            throw new IllegalArgumentException("Expense with name " + command.name() + " already exists");
-        });
-        var expense = new Expense(command);
-        expenseRepository.save(expense);
-        return Optional.of(expense);
+
+    public Long handle(CreateExpenseCommand command) {
+        userRepository.findById(command.userId()).map(user -> {
+            user = userRepository.findById(command.userId()).orElseThrow();
+            Expense expenses = new Expense(command.name(), command.amount(), user);
+            expenses = expenseRepository.save(expenses);
+            return expenses.getId();
+        }).orElseThrow(() -> new RuntimeException("Course not found"));
+        return 0L;
     }
 }

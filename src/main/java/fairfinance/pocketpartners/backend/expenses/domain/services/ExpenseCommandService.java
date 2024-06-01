@@ -5,5 +5,5 @@ import fairfinance.pocketpartners.backend.expenses.domain.model.commands.CreateE
 import java.util.Optional;
 
 public interface ExpenseCommandService {
-    Optional<Expense> handle(CreateExpenseCommand command);
+    Long handle(CreateExpenseCommand command);
 }

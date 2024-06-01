@@ -18,10 +18,10 @@ public class ExpensesContextFacade {
         this.expenseCommandService = expenseCommandService;
     }
 
-    public Long createExpense(String name, BigDecimal amount) {
-        var createExpenseCommand = new CreateExpenseCommand(name, amount);
-        var expense = expenseCommandService.handle(createExpenseCommand);
-        if(expense.isEmpty()) return 0L;
-        return expense.get().getId();
-    }
+    //public Long createExpense(String name, BigDecimal amount, Long userId) {
+    //    var createExpenseCommand = new CreateExpenseCommand(name, amount, userId);
+    //    var expense = expenseCommandService.handle(createExpenseCommand);
+    //    if(expense == null) return 0L;
+    //    return expense.toString().getId();
+    //}
 }
