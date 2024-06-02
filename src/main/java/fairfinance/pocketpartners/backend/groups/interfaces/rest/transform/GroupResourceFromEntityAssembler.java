@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.Group
 
 public class GroupResourceFromEntityAssembler {
     public static GroupResource toResourceFromEntity(Group group) {
-        return new GroupResource(group.getId(), group.getName().toString());
+        return new GroupResource(group.getId(), group.getName());
     }
 }

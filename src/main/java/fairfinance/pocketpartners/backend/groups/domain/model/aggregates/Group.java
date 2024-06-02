@@ -31,4 +31,12 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
     public void changeName(GroupName name) {
         this.name = name;
     }
+
+    public void changeName(String name) {
+        this.name = new GroupName(name);
+    }
+
+    public String getName() {
+        return name.GetName();
+    }
 }

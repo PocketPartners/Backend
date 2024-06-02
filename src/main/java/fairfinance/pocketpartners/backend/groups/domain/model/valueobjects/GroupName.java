@@ -13,4 +13,8 @@ public record GroupName(String name) {
     public GroupName () {
         this("No name");
     }
+
+    public String GetName() {
+        return String.format("%s", name);
+    }
 }
