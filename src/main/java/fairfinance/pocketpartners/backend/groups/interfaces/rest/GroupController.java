@@ -28,6 +28,14 @@ public class GroupController {
         this.groupQueryService = groupQueryService;
     }
 
+    /**
+     * Handles the POST request to create a new group.
+     *
+     * @param createGroupResource The request body containing the details of the group to be created.
+     * @return ResponseEntity<Group> Returns a ResponseEntity containing the created Group and HTTP status.
+     * If the group creation is successful, it returns the created group with HTTP status 201 (Created).
+     * If the group creation fails, it returns HTTP status 400 (Bad Request).
+     */
     @PostMapping
     public ResponseEntity<Group> createGroup(@RequestBody CreateGroupResource createGroupResource) {
         var createGroupCommand = CreateGroupCommandFromResourceAssembler.toCommandFromResource(createGroupResource);
@@ -35,6 +43,14 @@ public class GroupController {
         return group.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    /**
+     * Handles the GET request to retrieve a group by its ID.
+     *
+     * @param groupId The ID of the group to be retrieved.
+     * @return ResponseEntity<GroupResource> Returns a ResponseEntity containing the retrieved GroupResource and HTTP status.
+     * If the group is found, it returns the group with HTTP status 200 (OK).
+     * If the group is not found, it returns HTTP status 400 (Bad Request).
+     */
     @GetMapping("/{groupId}")
     public ResponseEntity<GroupResource> getGroup(@PathVariable Long groupId) {
         var getGroupByIdQuery = new GetGroupByIdQuery(groupId);
