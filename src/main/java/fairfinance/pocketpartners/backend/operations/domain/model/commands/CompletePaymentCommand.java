@@ -1,4 +1,4 @@
 package fairfinance.pocketpartners.backend.operations.domain.model.commands;
 
-public record CompletePaymentCommand() {
+public record CompletePaymentCommand(Long paymentId) {
 }

@@ -1,4 +1,10 @@
 package fairfinance.pocketpartners.backend.operations.interfaces.rest.resources;
 
-public record PaymentResource() {
+import java.math.BigDecimal;
+
+public record PaymentResource(Long id,
+                              String description,
+                              BigDecimal amount,
+                              Long userId,
+                              Long expenseId) {
 }

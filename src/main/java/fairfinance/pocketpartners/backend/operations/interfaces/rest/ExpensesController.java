@@ -56,8 +56,8 @@ public class ExpensesController {
 
     @GetMapping
     public ResponseEntity<List<ExpenseResource>> getAllExpenses() {
-        var GetAllExpensesQuery = new GetAllExpensesQuery();
-        var expenses = expenseQueryService.handle(new GetAllExpensesQuery());
+        var getAllExpensesQuery = new GetAllExpensesQuery();
+        var expenses = expenseQueryService.handle(getAllExpensesQuery);
         var expensesResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(expensesResources);
     }

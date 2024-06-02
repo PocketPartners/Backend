@@ -1,4 +1,6 @@
 package fairfinance.pocketpartners.backend.operations.domain.model.commands;
 
-public record CreatePaymentCommand() {
+import java.math.BigDecimal;
+
+public record CreatePaymentCommand(String description, BigDecimal amount, Long userId, Long expenseId) {
 }

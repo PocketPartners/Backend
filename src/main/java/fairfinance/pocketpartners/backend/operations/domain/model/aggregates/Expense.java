@@ -32,11 +32,11 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
         this.userId = user;
     }
 
-    public Expense(ExpenseName name, Amount amount, User user){
-        this.name = name;
-        this.amount = amount;
-        this.userId = user;
-    }
+    //public Expense(ExpenseName name, Amount amount, User user){
+    //    this.name = name;
+    //    this.amount = amount;
+    //    this.userId = user;
+    //}
 
     public Expense() {}
 
