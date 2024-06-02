@@ -61,4 +61,5 @@ public class Payment extends AuditableAbstractAggregateRoot<Payment> {
 
     public BigDecimal getAmount(){return amount.getAmount();}
 
+    public String getStatus(){return this.status.name().toLowerCase();}
 }

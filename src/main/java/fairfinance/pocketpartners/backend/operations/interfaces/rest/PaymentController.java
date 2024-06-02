@@ -1,8 +1,6 @@
 package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
-import fairfinance.pocketpartners.backend.operations.domain.model.aggregates.Payment;
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.CompletePaymentCommand;
-import fairfinance.pocketpartners.backend.operations.domain.model.commands.CreatePaymentCommand;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByExpenseIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByUserIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsQuery;
