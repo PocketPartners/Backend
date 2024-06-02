@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.Cre
 
 public class CreateExpenseCommandFromResourceAssembler {
     public static CreateExpenseCommand toCommandFromResource(CreateExpenseResource resource) {
-        return new CreateExpenseCommand(resource.name(), resource.amount());
+        return new CreateExpenseCommand(resource.name(), resource.amount(), resource.userId());
     }
 }

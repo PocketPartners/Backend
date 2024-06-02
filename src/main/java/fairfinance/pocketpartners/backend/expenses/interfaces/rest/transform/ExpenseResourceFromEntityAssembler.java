@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.Exp
 
 public class ExpenseResourceFromEntityAssembler {
     public static ExpenseResource toResourceFromEntity(Expense expense){
-        return new ExpenseResource(expense.getId(), expense.getName(), expense.getAmount());
+        return new ExpenseResource(expense.getId(), expense.getName(), expense.getAmount(), expense.getUserId());
     }
 }
