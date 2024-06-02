@@ -24,12 +24,12 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
 
 
     public Long handle(CreateExpenseCommand command) {
-        userRepository.findById(command.userId()).map(user -> {
-            user = userRepository.findById(command.userId()).orElseThrow();
-            Expense expenses = new Expense(command.name(), command.amount(), user);
-            expenses = expenseRepository.save(expenses);
-            return expenses.getId();
-        }).orElseThrow(() -> new RuntimeException("Course not found"));
-        return 0L;
+        Optional<User> user = userRepository.findById(command.userId());
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        Expense expense = new Expense(command.name(), command.amount(), user.get());
+        expenseRepository.save(expense);
+        return expense.getId();
     }
 }
