@@ -2,9 +2,11 @@ package fairfinance.pocketpartners.backend.expenses.application.internal.command
 
 import fairfinance.pocketpartners.backend.expenses.domain.model.aggregates.Expense;
 import fairfinance.pocketpartners.backend.expenses.domain.model.commands.CreateExpenseCommand;
+import fairfinance.pocketpartners.backend.expenses.domain.model.commands.UpdateExpenseCommand;
 import fairfinance.pocketpartners.backend.expenses.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.expenses.infrastructure.persistence.jpa.repositories.ExpenseRepository;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +16,34 @@ import java.util.Optional;
 public class ExpenseCommandServiceImpl implements ExpenseCommandService {
 
     private final ExpenseRepository expenseRepository;
+    private final UserRepository userRepository;
 
-    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserRepository userRepository) {this.expenseRepository = expenseRepository;}
+    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserRepository userRepository) {
+        this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public Optional<Expense> handle(CreateExpenseCommand command) {
-        var name = new ExpenseName(command.name());
-        expenseRepository.findByName(name).map(expense -> {
-            throw new IllegalArgumentException("Expense with name " + command.name() + " already exists");
-        });
-        var expense = new Expense(command);
+    public Long handle(CreateExpenseCommand command) {
+        Optional<User> user = userRepository.findById(command.userId());
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        Expense expense = new Expense(command.name(), command.amount(), user.get());
         expenseRepository.save(expense);
-        return Optional.of(expense);
+        return expense.getId();
+    }
+
+    @Override
+    public Optional<Expense> handle(UpdateExpenseCommand command) {
+        var result = expenseRepository.findById(command.id());
+        if (result.isEmpty()) {throw new IllegalArgumentException("Expense not found");}
+        var expenseToUpdate = result.get();
+        try {
+            var updateExpense = expenseRepository.save(expenseToUpdate.UpdateInformation(command.name(), command.amount()));
+            return Optional.of(updateExpense);
+        }catch (Exception e) {
+            throw new IllegalArgumentException("Error while updating expense: " + e.getMessage());
+        }
     }
 }

@@ -2,12 +2,16 @@ package fairfinance.pocketpartners.backend.expenses.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.expenses.domain.model.queries.GetAllExpensesQuery;
 import fairfinance.pocketpartners.backend.expenses.domain.model.queries.GetExpenseByIdQuery;
+import fairfinance.pocketpartners.backend.expenses.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.expenses.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseQueryService;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.CreateExpenseResource;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.ExpenseResource;
+import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.UpdateExpenseResource;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.transform.CreateExpenseCommandFromResourceAssembler;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.transform.ExpenseResourceFromEntityAssembler;
+import fairfinance.pocketpartners.backend.expenses.interfaces.rest.transform.UpdateExpenseCommandFromResourceAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +37,9 @@ public class ExpensesController {
     @PostMapping
     public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
         var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
-        var expense = expenseCommandService.handle(createExpenseCommand);
+        var expenseId = expenseCommandService.handle(createExpenseCommand);
+        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserId(new ExpenseName(resource.name()), resource.userId());
+        var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
         return new ResponseEntity<>(expenseResource, HttpStatus.CREATED);
@@ -54,5 +60,14 @@ public class ExpensesController {
         var expenses = expenseQueryService.handle(new GetAllExpensesQuery());
         var expensesResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(expensesResources);
+    }
+
+    @PutMapping("/{expenseId}")
+    public ResponseEntity<ExpenseResource> updateExpense(@PathVariable Long expenseId, @RequestBody UpdateExpenseResource updateExpenseResource) {
+        var updateExpenseCommand = UpdateExpenseCommandFromResourceAssembler.toCommandFromResource(expenseId, updateExpenseResource);
+        var updatedExpense = expenseCommandService.handle(updateExpenseCommand);
+        if(updatedExpense.isEmpty()) return ResponseEntity.badRequest().build();
+        var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(updatedExpense.get());
+        return ResponseEntity.ok(expenseResource);
     }
 }
