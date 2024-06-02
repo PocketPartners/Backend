@@ -57,6 +57,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         this.password = new Password(password);
     }
 
+    //Getters
     public String getFullName() {
         return name.getFullName();
     }
@@ -73,4 +74,13 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         return password.getPassword();
     }
 
+
+    // Setter methods
+    public void setName(PersonName name) {
+        this.name = name;
+    }
+
+    public void setEmail(EmailAddress email) {
+        this.email = email;
+    }
 }
