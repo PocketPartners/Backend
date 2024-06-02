@@ -63,7 +63,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentResources);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/userId/{userId}")
     public ResponseEntity<List<PaymentResource>> getPaymentByUserId(@PathVariable Long userId) {
         var getAllPaymentsByUserIdQuery = new GetAllPaymentsByUserIdQuery(userId);
         var payments = paymentQueryService.handle(getAllPaymentsByUserIdQuery);
@@ -72,7 +72,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentResources);
     }
 
-    @GetMapping("/{expenseId}")
+    @GetMapping("/expenseId/{expenseId}")
     public ResponseEntity<List<PaymentResource>> getPaymentByExpenseId(@PathVariable Long expenseId) {
         var getAllPaymentsByExpenseIdQuery = new GetAllPaymentsByExpenseIdQuery(expenseId);
         var payments = paymentQueryService.handle(getAllPaymentsByExpenseIdQuery);
