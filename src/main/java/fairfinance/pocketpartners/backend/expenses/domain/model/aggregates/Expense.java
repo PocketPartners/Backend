@@ -45,7 +45,17 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
 
     public void UpdateAmount(BigDecimal newAmount){this.amount = new Amount(newAmount);}
 
+    public Expense UpdateInformation(String newName, BigDecimal newAmount){
+        this.name = new ExpenseName(newName);
+        this.amount = new Amount(newAmount);
+        return this;
+    }
+
     public String getName(){return name.getName();}
 
     public BigDecimal getAmount(){return amount.getAmount();}
+
+    public User getUser(){return userId;}
+
+    public Long getUserId(){return userId.getId();}
 }

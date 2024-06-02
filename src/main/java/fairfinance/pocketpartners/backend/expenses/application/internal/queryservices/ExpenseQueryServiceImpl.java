@@ -30,6 +30,6 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 
     @Override
     public Optional<Expense> handle(GetExpenseByNameAndUserId query){
-        return expenseRepository.findByName(query.expenseName());
+        return expenseRepository.findByNameAndId(query.expenseName(), query.userId());
     }
 }

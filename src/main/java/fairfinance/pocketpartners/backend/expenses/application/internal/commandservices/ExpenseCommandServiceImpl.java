@@ -2,6 +2,7 @@ package fairfinance.pocketpartners.backend.expenses.application.internal.command
 
 import fairfinance.pocketpartners.backend.expenses.domain.model.aggregates.Expense;
 import fairfinance.pocketpartners.backend.expenses.domain.model.commands.CreateExpenseCommand;
+import fairfinance.pocketpartners.backend.expenses.domain.model.commands.UpdateExpenseCommand;
 import fairfinance.pocketpartners.backend.expenses.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.expenses.infrastructure.persistence.jpa.repositories.ExpenseRepository;
@@ -22,7 +23,7 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
         this.userRepository = userRepository;
     }
 
-
+    @Override
     public Long handle(CreateExpenseCommand command) {
         Optional<User> user = userRepository.findById(command.userId());
         if (user.isEmpty()) {
@@ -31,5 +32,18 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
         Expense expense = new Expense(command.name(), command.amount(), user.get());
         expenseRepository.save(expense);
         return expense.getId();
+    }
+
+    @Override
+    public Optional<Expense> handle(UpdateExpenseCommand command) {
+        var result = expenseRepository.findById(command.id());
+        if (result.isEmpty()) {throw new IllegalArgumentException("Expense not found");}
+        var expenseToUpdate = result.get();
+        try {
+            var updateExpense = expenseRepository.save(expenseToUpdate.UpdateInformation(command.name(), command.amount()));
+            return Optional.of(updateExpense);
+        }catch (Exception e) {
+            throw new IllegalArgumentException("Error while updating expense: " + e.getMessage());
+        }
     }
 }

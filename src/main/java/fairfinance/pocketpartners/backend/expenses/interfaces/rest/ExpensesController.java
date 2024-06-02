@@ -8,8 +8,10 @@ import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseComman
 import fairfinance.pocketpartners.backend.expenses.domain.services.ExpenseQueryService;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.CreateExpenseResource;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.ExpenseResource;
+import fairfinance.pocketpartners.backend.expenses.interfaces.rest.resources.UpdateExpenseResource;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.transform.CreateExpenseCommandFromResourceAssembler;
 import fairfinance.pocketpartners.backend.expenses.interfaces.rest.transform.ExpenseResourceFromEntityAssembler;
+import fairfinance.pocketpartners.backend.expenses.interfaces.rest.transform.UpdateExpenseCommandFromResourceAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,5 +60,14 @@ public class ExpensesController {
         var expenses = expenseQueryService.handle(new GetAllExpensesQuery());
         var expensesResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(expensesResources);
+    }
+
+    @PutMapping("/{expenseId}")
+    public ResponseEntity<ExpenseResource> updateExpense(@PathVariable Long expenseId, @RequestBody UpdateExpenseResource updateExpenseResource) {
+        var updateExpenseCommand = UpdateExpenseCommandFromResourceAssembler.toCommandFromResource(expenseId, updateExpenseResource);
+        var updatedExpense = expenseCommandService.handle(updateExpenseCommand);
+        if(updatedExpense.isEmpty()) return ResponseEntity.badRequest().build();
+        var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(updatedExpense.get());
+        return ResponseEntity.ok(expenseResource);
     }
 }
