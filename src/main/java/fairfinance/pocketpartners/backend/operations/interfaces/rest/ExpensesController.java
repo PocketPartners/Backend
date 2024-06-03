@@ -70,4 +70,5 @@ public class ExpensesController {
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(updatedExpense.get());
         return ResponseEntity.ok(expenseResource);
     }
+
 }

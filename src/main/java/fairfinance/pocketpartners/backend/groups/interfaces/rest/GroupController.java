@@ -1,12 +1,19 @@
 package fairfinance.pocketpartners.backend.groups.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
+import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllGroupsQuery;
 import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetGroupByIdQuery;
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupQueryService;
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.CreateGroupResource;
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.GroupResource;
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.transform.CreateGroupCommandFromResourceAssembler;
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.transform.GroupResourceFromEntityAssembler;
+import fairfinance.pocketpartners.backend.users.domain.model.queries.GetAllUsersQuery;
+import fairfinance.pocketpartners.backend.users.interfaces.rest.resources.UserResource;
+import fairfinance.pocketpartners.backend.users.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupCommandService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/v1/groups", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,5 +70,18 @@ public class GroupController {
         }
         var courseResource = GroupResourceFromEntityAssembler.toResourceFromEntity(group.get());
         return ResponseEntity.ok(courseResource);
+    }
+
+    //GET ALL
+    @Operation(summary = "Get all groups")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of groups")
+    })
+    @GetMapping
+    public ResponseEntity<List<GroupResource>> getAllGroups() {
+        var getAllGroupsQuery = new GetAllGroupsQuery();
+        var groups = groupQueryService.handle(getAllGroupsQuery);
+        var groupsResources = groups.stream().map(GroupResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
+        return ResponseEntity.ok(groupsResources);
     }
 }

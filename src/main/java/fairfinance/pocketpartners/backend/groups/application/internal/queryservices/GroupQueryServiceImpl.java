@@ -1,11 +1,15 @@
 package fairfinance.pocketpartners.backend.groups.application.internal.queryservices;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
+import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllGroupsQuery;
 import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetGroupByIdQuery;
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupQueryService;
 import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupRepository;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
+import fairfinance.pocketpartners.backend.users.domain.model.queries.GetAllUsersQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,5 +24,10 @@ public class GroupQueryServiceImpl implements GroupQueryService {
     @Override
     public Optional<Group> handle(GetGroupByIdQuery query) {
         return groupRepository.findById(query.groupId());
+    }
+
+    @Override
+    public List<Group> handle(GetAllGroupsQuery query) {
+        return groupRepository.findAll();
     }
 }

@@ -73,11 +73,11 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "List of users")
     })
     @GetMapping
-    public ResponseEntity<List<UserResource>> getAllProfiles() {
+    public ResponseEntity<List<UserResource>> getAllUsers() {
         var getAllUsersQuery = new GetAllUsersQuery();
-        var profiles = userQueryService.handle(getAllUsersQuery);
-        var profileResources = profiles.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
-        return ResponseEntity.ok(profileResources);
+        var users = userQueryService.handle(getAllUsersQuery);
+        var userResources = users.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
+        return ResponseEntity.ok(userResources);
     }
 
 

@@ -45,4 +45,5 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
             throw new IllegalArgumentException("Error while updating expense: " + e.getMessage());
         }
     }
+
 }
