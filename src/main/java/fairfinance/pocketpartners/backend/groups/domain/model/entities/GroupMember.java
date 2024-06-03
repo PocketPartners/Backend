@@ -1,6 +1,7 @@
 package fairfinance.pocketpartners.backend.groups.domain.model.entities;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
+import fairfinance.pocketpartners.backend.groups.domain.model.valueobjects.GroupMemberId;
 import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Getter
+@IdClass(GroupMemberId.class)
 @EntityListeners(AuditingEntityListener.class)
 public class GroupMember {
 
@@ -53,6 +55,7 @@ public class GroupMember {
     public GroupMember(Group group, User user) {
         this.group = group;
         this.user = user;
+        this.joinedAt = new Date();
     }
 
     /**

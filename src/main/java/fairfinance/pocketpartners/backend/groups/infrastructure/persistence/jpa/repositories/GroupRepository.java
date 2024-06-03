@@ -10,6 +10,5 @@ import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-
     Optional<Group> findByName(GroupName name);
 }
