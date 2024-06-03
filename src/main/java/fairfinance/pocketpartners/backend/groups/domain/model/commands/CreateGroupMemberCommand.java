@@ -1,4 +1,4 @@
 package fairfinance.pocketpartners.backend.groups.domain.model.commands;
 
-public record UpdateGroupOperationCommand() {
+public record CreateGroupMemberCommand(Long groupId, Long userId){
 }
