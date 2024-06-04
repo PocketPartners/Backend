@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "api/v1/groupOperations", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "GroupOperations",description = "Group Operations Management Endpoint")
 public class GroupOperationsController {
