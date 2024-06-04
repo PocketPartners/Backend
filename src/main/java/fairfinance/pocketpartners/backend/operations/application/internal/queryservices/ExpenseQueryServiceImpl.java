@@ -4,6 +4,7 @@ import fairfinance.pocketpartners.backend.operations.domain.model.aggregates.Exp
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByUserId;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseQueryService;
 import fairfinance.pocketpartners.backend.operations.infrastructure.persistence.jpa.repositories.ExpenseRepository;
 import org.springframework.stereotype.Service;

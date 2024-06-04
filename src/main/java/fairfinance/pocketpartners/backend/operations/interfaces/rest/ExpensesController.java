@@ -3,6 +3,7 @@ package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByUserId;
 import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseQueryService;
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/v1/expenses", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name="Expenses", description = "Expenses Management Endpoints")
 public class ExpensesController {

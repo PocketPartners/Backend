@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "api/v1/groups/{groupId}/members")
 @Tag(name = "Member Group", description = "Member Group Management Endpoints")
 public class GroupMemberController {
