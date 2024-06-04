@@ -24,12 +24,12 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @Getter
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     public Expense(String name, BigDecimal amount, User user){
         this.name = new ExpenseName(name);
         this.amount = new Amount(amount);
-        this.userId = user;
+        this.user = user;
     }
 
     //public Expense(ExpenseName name, Amount amount, User user){
@@ -54,7 +54,4 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
 
     public BigDecimal getAmount(){return amount.getAmount();}
 
-    public User getUser(){return userId;}
-
-    public Long getUserId(){return userId.getId();}
 }
