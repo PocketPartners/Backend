@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.users.interfaces.rest.resources.Create
 
 public class    CreateUserCommandFromResourceAssembler {
     public static CreateUserCommand toCommandfromResource(CreateUserResource resource) {
-        return new CreateUserCommand(resource.firstName(), resource.lastName(), resource.phoneNumber(), resource.email(), resource.password());
+        return new CreateUserCommand(resource.firstName(), resource.lastName(), resource.phoneNumber(), resource.photo(), resource.email(), resource.password());
     }
 }

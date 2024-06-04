@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.users.interfaces.rest.resources.Update
 
 public class UpdateUserCommandFromResourceAssembler {
     public static UpdateUserCommand toCommandfromResource(Long userId, UpdateUserResource resource) {
-        return new UpdateUserCommand(userId, resource.firstName(), resource.lastName(), resource.phoneNumber(), resource.email());
+        return new UpdateUserCommand(userId, resource.firstName(), resource.lastName(), resource.phoneNumber(), resource.photo(), resource.email());
     }
 }

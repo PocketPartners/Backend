@@ -43,6 +43,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         return userRepository.findById(command.userId()).map(user -> {
             user.updateName(command.firstName(), command.lastName());
             user.updatePhoneNumber(command.phoneNumber());
+            user.updatePhoto(command.photo());
             user.updateEmail(command.email());
             userRepository.save(user);
             return user;

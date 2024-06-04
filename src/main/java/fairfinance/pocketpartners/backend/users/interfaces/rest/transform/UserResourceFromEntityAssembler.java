@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.users.interfaces.rest.resources.UserRe
 
 public class UserResourceFromEntityAssembler {
     public static UserResource toResourceFromEntity(User user) {
-        return new UserResource(user.getId(), user.getFullName(), user.getPhoneNumber(), user.getEmailAddress(), user.getPassword());
+        return new UserResource(user.getId(), user.getFullName(), user.getPhoneNumber(), user.getPhoto(), user.getEmailAddress(), user.getPassword());
     }
 }
