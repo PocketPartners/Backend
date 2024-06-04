@@ -1,4 +1,4 @@
 package fairfinance.pocketpartners.backend.operations.domain.model.queries;
 
-public record GetExpenseByUserId(Long userId) {
+public record GetAllExpensesByUserIdQuery(Long userId) {
 }
