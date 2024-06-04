@@ -1,4 +1,0 @@
-package fairfinance.pocketpartners.backend.users.interfaces.rest.transform;
-
-public class AuthenticatedUserReourceFromEntityAssembler {
-}
