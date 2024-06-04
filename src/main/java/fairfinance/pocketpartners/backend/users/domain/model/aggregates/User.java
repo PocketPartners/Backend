@@ -2,13 +2,19 @@ package fairfinance.pocketpartners.backend.users.domain.model.aggregates;
 
 import fairfinance.pocketpartners.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.CreateUserCommand;
+import fairfinance.pocketpartners.backend.users.domain.model.entities.Role;
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.*;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
 
+    @NotBlank
     @Embedded
     private PersonName name;
 
@@ -18,11 +24,19 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @Embedded
     private Photo photo;
 
+    @NotBlank
     @Embedded
     EmailAddress email;
 
+    @NotBlank
     @Embedded
     private Password password;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public User(String firstName, String lastName, String phoneNumber,String photo, String email, String password) {
         this.name = new PersonName(firstName, lastName);
@@ -30,17 +44,31 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         this.photo = new Photo(photo);
         this.email = new EmailAddress(email);
         this.password = new Password(password);
+        this.roles = new HashSet<>();
     }
 
-    public User(CreateUserCommand command) {
+    public User(CreateUserCommand command, List<Role> roles) {
         this.name = new PersonName(command.firstName(), command.lastName());
         this.phoneNumber = new PhoneNumber(command.phoneNumber());
         this.photo = new Photo(command.photo());
         this.email = new EmailAddress(command.email());
         this.password = new Password(command.password());
+        addRoles(roles);
     }
 
     public User() {
+        this.roles = new HashSet<>();
+    }
+
+    public User addRole(Role role) {
+        this.roles.add(role);
+        return this;
+    }
+
+    public User addRoles(List<Role> roles) {
+        var validatedRoleSet = Role.validateRoleSet(roles);
+        this.roles.addAll(validatedRoleSet);
+        return this;
     }
 
     public void updateName(String firstName, String lastName) {
