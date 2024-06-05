@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "api/v1/payments", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name="Payments", description = "Payments Management Endpoint")
 public class PaymentController {
