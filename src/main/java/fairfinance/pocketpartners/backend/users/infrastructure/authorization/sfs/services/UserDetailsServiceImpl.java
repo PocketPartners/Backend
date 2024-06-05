@@ -2,6 +2,7 @@ package fairfinance.pocketpartners.backend.users.infrastructure.authorization.sf
 
 import fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.model.UserDetailsImpl;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
+import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service(value = "defaultUserDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserInformationRepository userInformationRepository;
+    private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserInformationRepository userInformationRepository) {
-        this.userInformationRepository = userInformationRepository;
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     /**
@@ -24,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userInformationRepository.findByUsername(username)
+        var user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         return UserDetailsImpl.build(user);
     }

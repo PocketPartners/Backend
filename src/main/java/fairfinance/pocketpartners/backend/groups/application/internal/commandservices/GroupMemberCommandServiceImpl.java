@@ -6,6 +6,7 @@ import fairfinance.pocketpartners.backend.groups.domain.services.GroupMemberComm
 import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupMemberRepository;
 import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupRepository;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
+import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,12 +16,12 @@ public class GroupMemberCommandServiceImpl implements GroupMemberCommandService 
 
     private final GroupMemberRepository groupMemberRepository;
     private final GroupRepository groupRepository;
-    private final UserInformationRepository userInformationRepository;
+    private final UserRepository userRepository;
 
-    public GroupMemberCommandServiceImpl(GroupMemberRepository groupMemberRepository, GroupRepository groupRepository, UserInformationRepository userInformationRepository) {
+    public GroupMemberCommandServiceImpl(GroupMemberRepository groupMemberRepository, GroupRepository groupRepository, UserRepository userRepository) {
         this.groupMemberRepository = groupMemberRepository;
         this.groupRepository = groupRepository;
-        this.userInformationRepository = userInformationRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -30,7 +31,7 @@ public class GroupMemberCommandServiceImpl implements GroupMemberCommandService 
             return Optional.empty();
         }
         return Optional.ofNullable(groupRepository.findById(command.groupId()).orElse(null))
-                .flatMap(group -> Optional.ofNullable(userInformationRepository.findById(command.userId()).orElse(null))
+                .flatMap(group -> Optional.ofNullable(userRepository.findById(command.userId()).orElse(null))
                         .map(user -> {
                             GroupMember groupMember = new GroupMember(group, user);
                             groupMemberRepository.save(groupMember);

@@ -18,6 +18,11 @@ import java.util.Set;
 @Entity
 public class UserInformation extends AuditableAbstractAggregateRoot<UserInformation> {
 
+    @Getter
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private UserInformation userInformation;
+
     @NotBlank
     @Embedded
     private PersonName name;
