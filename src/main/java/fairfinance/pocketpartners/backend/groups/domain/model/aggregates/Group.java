@@ -2,6 +2,7 @@ package fairfinance.pocketpartners.backend.groups.domain.model.aggregates;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.commands.CreateGroupCommand;
 import fairfinance.pocketpartners.backend.groups.domain.model.valueobjects.GroupName;
+import fairfinance.pocketpartners.backend.groups.domain.model.valueobjects.GroupPhoto;
 import fairfinance.pocketpartners.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -23,13 +24,17 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
     @Embedded
     private GroupName name;
 
+    @Embedded
+    private GroupPhoto groupPhoto;
+
     /**
      * Constructs a new Group with the provided name.
      *
      * @param name The name of the group.
      */
-    public Group(GroupName name) {
+    public Group(GroupName name, GroupPhoto groupPhoto) {
         this.name = name;
+        this.groupPhoto = groupPhoto;
     }
 
     /**
@@ -39,6 +44,7 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
      */
     public Group(CreateGroupCommand command) {
         this.name = new GroupName(command.name());
+        this.groupPhoto = new GroupPhoto(command.groupPhoto());
     }
 
     /**
@@ -46,6 +52,7 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
      */
     public Group() {
         this.name = new GroupName();
+        this.groupPhoto = new GroupPhoto();
     }
 
     /**
@@ -57,6 +64,10 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
         this.name = name;
     }
 
+    public void changeGroupPhoto(GroupPhoto groupPhoto) {
+        this.groupPhoto = groupPhoto;
+    }
+
     /**
      * Changes the name of the group.
      *
@@ -66,6 +77,10 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
         this.name = new GroupName(name);
     }
 
+    public void changeGroupPhoto(String groupPhoto) {
+        this.groupPhoto = new GroupPhoto(groupPhoto);
+    }
+
     /**
      * Returns the name of the group.
      *
@@ -73,5 +88,9 @@ public class Group extends AuditableAbstractAggregateRoot<Group> {
      */
     public String getName() {
         return name.GetName();
+    }
+
+    public String getGroupPhoto() {
+        return groupPhoto.getPhotoLink();
     }
 }

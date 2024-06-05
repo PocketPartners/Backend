@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.Creat
 
 public class CreateGroupCommandFromResourceAssembler {
     public static CreateGroupCommand toCommandFromResource(CreateGroupResource createGroupResource) {
-        return new CreateGroupCommand(createGroupResource.name());
+        return new CreateGroupCommand(createGroupResource.name(), createGroupResource.groupPhoto());
     }
 }
