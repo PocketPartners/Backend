@@ -1,18 +1,22 @@
 package fairfinance.pocketpartners.backend.users.domain.model.aggregates;
 
 import fairfinance.pocketpartners.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import fairfinance.pocketpartners.backend.users.domain.model.commands.CreateUserCommand;
+import fairfinance.pocketpartners.backend.users.domain.model.commands.CreateUserInformationCommand;
 import fairfinance.pocketpartners.backend.users.domain.model.entities.Role;
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-public class User extends AuditableAbstractAggregateRoot<User> {
+public class UserInformation extends AuditableAbstractAggregateRoot<UserInformation> {
 
     @NotBlank
     @Embedded
@@ -28,48 +32,25 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @Embedded
     EmailAddress email;
 
-    @NotBlank
-    @Embedded
-    private Password password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(	name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-
-    public User(String firstName, String lastName, String phoneNumber,String photo, String email, String password) {
+    public UserInformation(String firstName, String lastName, String phoneNumber, String photo, String email) {
         this.name = new PersonName(firstName, lastName);
         this.phoneNumber = new PhoneNumber(phoneNumber);
         this.photo = new Photo(photo);
         this.email = new EmailAddress(email);
-        this.password = new Password(password);
-        this.roles = new HashSet<>();
     }
 
-    public User(CreateUserCommand command, List<Role> roles) {
+    public UserInformation(CreateUserInformationCommand command) {
         this.name = new PersonName(command.firstName(), command.lastName());
         this.phoneNumber = new PhoneNumber(command.phoneNumber());
         this.photo = new Photo(command.photo());
         this.email = new EmailAddress(command.email());
-        this.password = new Password(command.password());
-        addRoles(roles);
     }
 
-    public User() {
-        this.roles = new HashSet<>();
+    public UserInformation() {
     }
 
-    public User addRole(Role role) {
-        this.roles.add(role);
-        return this;
-    }
 
-    public User addRoles(List<Role> roles) {
-        var validatedRoleSet = Role.validateRoleSet(roles);
-        this.roles.addAll(validatedRoleSet);
-        return this;
-    }
 
     public void updateName(String firstName, String lastName) {
         this.name = new PersonName(firstName, lastName);
@@ -87,10 +68,6 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         this.email = new EmailAddress(email);
     }
 
-    public void updatePassword(String password) {
-        this.password = new Password(password);
-    }
-
     //Getters
     public String getFullName() {
         return name.getFullName();
@@ -102,10 +79,6 @@ public class User extends AuditableAbstractAggregateRoot<User> {
 
     public String getPhoneNumber() {
         return phoneNumber.getPhoneNumber();
-    }
-
-    public String getPassword() {
-        return password.getPassword();
     }
 
     public String getPhoto() {

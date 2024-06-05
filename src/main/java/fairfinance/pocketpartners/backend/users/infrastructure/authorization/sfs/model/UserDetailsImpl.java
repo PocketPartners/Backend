@@ -1,6 +1,6 @@
 package fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.model;
 
-import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,17 +36,17 @@ public class UserDetailsImpl implements UserDetails {
 
     /**
      * This method is responsible for building the UserDetailsImpl object from the User object.
-     * @param user The user object.
+     * @param userInformation The user object.
      * @return The UserDetailsImpl object.
      */
-    public static UserDetailsImpl build(User user) {
-        var authorities = user.getRoles().stream()
+    public static UserDetailsImpl build(UserInformation userInformation) {
+        var authorities = userInformation.getRoles().stream()
                 .map(role -> role.getName().name())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         return new UserDetailsImpl(
-                user.getFullName(),
-                user.getPassword(),
+                userInformation.getFullName(),
+                userInformation.getPassword(),
                 authorities);
     }
 

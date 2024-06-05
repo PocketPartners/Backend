@@ -5,8 +5,6 @@ import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllGrou
 import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetGroupByIdQuery;
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupQueryService;
 import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupRepository;
-import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
-import fairfinance.pocketpartners.backend.users.domain.model.queries.GetAllUsersQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

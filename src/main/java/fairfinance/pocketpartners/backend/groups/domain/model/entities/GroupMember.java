@@ -2,7 +2,7 @@ package fairfinance.pocketpartners.backend.groups.domain.model.entities;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
 import fairfinance.pocketpartners.backend.groups.domain.model.valueobjects.GroupMemberId;
-import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,7 +36,7 @@ public class GroupMember {
     @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserInformation userInformation;
 
     /**
      * The date when the user joined the group.
@@ -50,11 +50,11 @@ public class GroupMember {
      * Constructs a new GroupMember with the provided group and user.
      *
      * @param group The group that the user is joining.
-     * @param user The user who is joining the group.
+     * @param userInformation The user who is joining the group.
      */
-    public GroupMember(Group group, User user) {
+    public GroupMember(Group group, UserInformation userInformation) {
         this.group = group;
-        this.user = user;
+        this.userInformation = userInformation;
         this.joinedAt = new Date();
     }
 

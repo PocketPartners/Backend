@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.Group
 
 public class CreateGroupMemberCommandFromResourceAssembler {
     public static GroupMemberResource fromCommandToResource(GroupMember resource) {
-        return new GroupMemberResource(resource.getGroup().getId(), resource.getUser().getId(), resource.getGroup().getName(), resource.getUser().getFullName(), resource.getUser().getEmailAddress(), resource.getUser().getPhoneNumber(), resource.getJoinedAt());
+        return new GroupMemberResource(resource.getGroup().getId(), resource.getUserInformation().getId(), resource.getGroup().getName(), resource.getUserInformation().getFullName(), resource.getUserInformation().getEmailAddress(), resource.getUserInformation().getPhoneNumber(), resource.getJoinedAt());
     }
 }

@@ -8,9 +8,6 @@ import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.Creat
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.resources.GroupResource;
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.transform.CreateGroupCommandFromResourceAssembler;
 import fairfinance.pocketpartners.backend.groups.interfaces.rest.transform.GroupResourceFromEntityAssembler;
-import fairfinance.pocketpartners.backend.users.domain.model.queries.GetAllUsersQuery;
-import fairfinance.pocketpartners.backend.users.interfaces.rest.resources.UserResource;
-import fairfinance.pocketpartners.backend.users.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

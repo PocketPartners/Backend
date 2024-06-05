@@ -5,8 +5,8 @@ import fairfinance.pocketpartners.backend.operations.domain.model.commands.Creat
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.UpdateExpenseCommand;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.operations.infrastructure.persistence.jpa.repositories.ExpenseRepository;
-import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
-import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
+import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,16 +15,16 @@ import java.util.Optional;
 public class ExpenseCommandServiceImpl implements ExpenseCommandService {
 
     private final ExpenseRepository expenseRepository;
-    private final UserRepository userRepository;
+    private final UserInformationRepository userInformationRepository;
 
-    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserRepository userRepository) {
+    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserInformationRepository userInformationRepository) {
         this.expenseRepository = expenseRepository;
-        this.userRepository = userRepository;
+        this.userInformationRepository = userInformationRepository;
     }
 
     @Override
     public Long handle(CreateExpenseCommand command) {
-        Optional<User> user = userRepository.findById(command.userId());
+        Optional<UserInformation> user = userInformationRepository.findById(command.userId());
         if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }

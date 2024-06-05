@@ -7,26 +7,26 @@ import fairfinance.pocketpartners.backend.operations.domain.model.commands.Creat
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentCommandService;
 import fairfinance.pocketpartners.backend.operations.infrastructure.persistence.jpa.repositories.ExpenseRepository;
 import fairfinance.pocketpartners.backend.operations.infrastructure.persistence.jpa.repositories.PaymentRepository;
-import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
-import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
+import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentCommandServiceImpl implements PaymentCommandService {
     private final PaymentRepository paymentRepository;
-    private final UserRepository userRepository;
+    private final UserInformationRepository userInformationRepository;
     private final ExpenseRepository expenseRepository;
 
-    public PaymentCommandServiceImpl(PaymentRepository paymentRepository, UserRepository userRepository, ExpenseRepository expenseRepository) {
+    public PaymentCommandServiceImpl(PaymentRepository paymentRepository, UserInformationRepository userInformationRepository, ExpenseRepository expenseRepository) {
         this.paymentRepository = paymentRepository;
-        this.userRepository = userRepository;
+        this.userInformationRepository = userInformationRepository;
         this.expenseRepository = expenseRepository;
     }
 
     public Long handle(CreatePaymentCommand command) {
         expenseRepository.findById(command.expenseId()).map(expense -> {
-            User user = userRepository.findById(command.userId()).orElseThrow(() -> new UserNotFoundException(command.userId()));
-            Payment payment = new Payment(command.description(), command.amount(), user, expense);
+            UserInformation userInformation = userInformationRepository.findById(command.userId()).orElseThrow(() -> new UserNotFoundException(command.userId()));
+            Payment payment = new Payment(command.description(), command.amount(), userInformation, expense);
             payment = paymentRepository.save(payment);
             return payment.getId();
         }).orElseThrow(() -> new RuntimeException("User not found"));
