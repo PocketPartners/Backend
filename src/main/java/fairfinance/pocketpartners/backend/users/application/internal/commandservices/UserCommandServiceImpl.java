@@ -20,6 +20,12 @@ public class UserCommandServiceImpl implements UserCommandService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Handles the creation of a new user.
+     * @param command CreateUserCommand object containing the user's details.
+     * @return Optional<User> Newly created user.
+     * @throws IllegalArgumentException if a user with the same email already exists.
+     */
     @Override
     public Optional<User> handle(CreateUserCommand command) {
         var emailAddress = new EmailAddress(command.email());
@@ -30,7 +36,11 @@ public class UserCommandServiceImpl implements UserCommandService {
         userRepository.save(user);
         return Optional.of(user);
     }
-
+    /**
+     * Handles the deletion of a user.
+     * @param command DeleteUserCommand object containing the user's ID.
+     * @return Optional<User> Deleted user.
+     */
     @Override
     public Optional<User> handle(DeleteUserCommand command) {
         var user = userRepository.findById(command.userId());
@@ -38,6 +48,11 @@ public class UserCommandServiceImpl implements UserCommandService {
         return user;
     }
 
+    /**
+     * Handles the updating of a user's details.
+     * @param command UpdateUserCommand object containing the user's updated details.
+     * @return Optional<User> Updated user.
+     */
     @Override
     public Optional<User> handle(UpdateUserCommand command) {
         return userRepository.findById(command.userId()).map(user -> {
@@ -49,6 +64,5 @@ public class UserCommandServiceImpl implements UserCommandService {
             return user;
         });
     }
-
 
 }
