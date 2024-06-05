@@ -1,9 +1,6 @@
 package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesByUserIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserIdQuery;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.*;
 import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseQueryService;
@@ -81,4 +78,12 @@ public class ExpensesController {
         return ResponseEntity.ok(expenseResource);
     }
 
+    @GetMapping("/groupId/{groupId}")
+    public ResponseEntity<List<ExpenseResource>> getExpensesByGroupId(@PathVariable Long groupId) {
+        var getAllExpensesByGroupIdQuery = new GetAllExpensesByGroupIdQuery(groupId);
+        var expenses = expenseQueryService.handle(getAllExpensesByGroupIdQuery);
+        if (expenses.isEmpty()) {return ResponseEntity.badRequest().build();}
+        var expenseResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(expenseResources);
+    }
 }
