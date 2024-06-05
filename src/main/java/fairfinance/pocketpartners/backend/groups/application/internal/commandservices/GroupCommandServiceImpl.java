@@ -2,6 +2,7 @@ package fairfinance.pocketpartners.backend.groups.application.internal.commandse
 
 import java.util.Optional;
 
+import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupCurrencyRepository;
 import org.springframework.stereotype.Service;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
