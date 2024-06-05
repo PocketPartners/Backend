@@ -9,5 +9,7 @@ public record CreateExpenseResource(@NotNull
                                     @NotNull
                                     BigDecimal amount,
                                     @NotNull
-                                    Long userId) {
+                                    Long userId,
+                                    @NotNull
+                                    Long groupId) {
 }
