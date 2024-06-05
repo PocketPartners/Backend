@@ -2,10 +2,7 @@ package fairfinance.pocketpartners.backend.users.domain.model.aggregates;
 
 import fairfinance.pocketpartners.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.CreateUserCommand;
-import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.EmailAddress;
-import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.Password;
-import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.PersonName;
-import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.PhoneNumber;
+import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.*;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 
@@ -19,14 +16,18 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     private PhoneNumber phoneNumber;
 
     @Embedded
+    private Photo photo;
+
+    @Embedded
     EmailAddress email;
 
     @Embedded
     private Password password;
 
-    public User(String firstName, String lastName, String phoneNumber, String email, String password) {
+    public User(String firstName, String lastName, String phoneNumber,String photo, String email, String password) {
         this.name = new PersonName(firstName, lastName);
         this.phoneNumber = new PhoneNumber(phoneNumber);
+        this.photo = new Photo(photo);
         this.email = new EmailAddress(email);
         this.password = new Password(password);
     }
@@ -34,6 +35,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     public User(CreateUserCommand command) {
         this.name = new PersonName(command.firstName(), command.lastName());
         this.phoneNumber = new PhoneNumber(command.phoneNumber());
+        this.photo = new Photo(command.photo());
         this.email = new EmailAddress(command.email());
         this.password = new Password(command.password());
     }
@@ -47,6 +49,10 @@ public class User extends AuditableAbstractAggregateRoot<User> {
 
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = new PhoneNumber(phoneNumber);
+    }
+
+    public void updatePhoto(String photo) {
+        this.photo = new Photo(photo);
     }
 
     public void updateEmail(String email) {
@@ -72,6 +78,10 @@ public class User extends AuditableAbstractAggregateRoot<User> {
 
     public String getPassword() {
         return password.getPassword();
+    }
+
+    public String getPhoto() {
+        return photo.getPhoto();
     }
 
 

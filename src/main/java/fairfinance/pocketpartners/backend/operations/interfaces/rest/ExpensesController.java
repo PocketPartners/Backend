@@ -1,8 +1,9 @@
 package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesByUserIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseQueryService;
@@ -38,7 +39,7 @@ public class ExpensesController {
     public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
         var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
         var expenseId = expenseCommandService.handle(createExpenseCommand);
-        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserId(new ExpenseName(resource.name()), resource.userId());
+        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserIdQuery(new ExpenseName(resource.name()), resource.userId());
         var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
@@ -52,6 +53,15 @@ public class ExpensesController {
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
         return ResponseEntity.ok(expenseResource);
+    }
+
+    @GetMapping("/userId/{userId}")
+    public ResponseEntity<List<ExpenseResource>> getExpensesByUserId(@PathVariable Long userId) {
+        var getAllExpensesByUserIdQuery = new GetAllExpensesByUserIdQuery(userId);
+        var expenses = expenseQueryService.handle(getAllExpensesByUserIdQuery);
+        if (expenses.isEmpty()) {return ResponseEntity.badRequest().build();}
+        var expenseResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(expenseResources);
     }
 
     @GetMapping

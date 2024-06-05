@@ -16,11 +16,11 @@ public class UsersContextFacade {
         this.userCommandService = userCommandService;
     }
 
-    public Long createUser(String firstName, String lastName,String phoneNumber, String email, String password) {
-        var createProfileCommand = new CreateUserCommand(firstName, lastName, phoneNumber, email, password);
-        var profile = userCommandService.handle(createProfileCommand);
-        if (profile.isEmpty()) return 0L;
-        return profile.get().getId();
+    public Long createUser(String firstName, String lastName,String phoneNumber,String photo, String email, String password) {
+        var createProfileCommand = new CreateUserCommand(firstName, lastName, phoneNumber,photo, email, password);
+        var user = userCommandService.handle(createProfileCommand);
+        if (user.isEmpty()) return 0L;
+        return user.get().getId();
     }
 
 }
