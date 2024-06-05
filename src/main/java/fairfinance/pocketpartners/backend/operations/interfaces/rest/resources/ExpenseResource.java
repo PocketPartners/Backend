@@ -6,5 +6,7 @@ public record ExpenseResource(Long id,
                               String name,
                               BigDecimal amount,
                               Long userId,
-                              Long groupId){
+                              Long groupId,
+                              java.util.Date createdAt,
+                              java.util.Date updatedAt) {
 }

@@ -17,6 +17,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200")
+                        .allowedOrigins("https://poketpartners-deployment.vercel.app")
                         .allowedMethods(HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
                                 HttpMethod.DELETE.name())
