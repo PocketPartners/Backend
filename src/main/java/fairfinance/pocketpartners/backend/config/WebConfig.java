@@ -18,6 +18,8 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200")
                         .allowedOrigins("https://poketpartners-deployment.vercel.app")
+                        .allowedOrigins("https://fair-finance-poketpartners.web.app")
+                        .allowedOrigins("https://pocket-partners-frontend.vercel.app")
                         .allowedMethods(HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
                                 HttpMethod.DELETE.name())
