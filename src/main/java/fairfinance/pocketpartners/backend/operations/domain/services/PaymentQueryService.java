@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PaymentQueryService {
     List<Payment> handle(GetAllPaymentsQuery query);
     Optional<Payment> handle(GetPaymentByIdQuery query);
-    List<Payment> handle(GetAllPaymentsByUserIdQuery query);
+    List<Payment> handle(GetAllPaymentsByUserInformationIdQuery query);
     List<Payment> handle(GetAllPaymentsByExpenseIdQuery query);
-    Optional<Payment> handle(GetPaymentByUserIdAndExpenseId query);
+    Optional<Payment> handle(GetPaymentByUserInformationIdAndExpenseId query);
 }

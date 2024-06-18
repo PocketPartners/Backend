@@ -36,7 +36,7 @@ public class PaymentController {
         var command = CreatePaymentCommandFromResourceAssembler.toCommandFromResource(resource);
         var paymentId = paymentCommandService.handle(command);
         System.out.println("Payment ID: " + paymentId);
-        var getPaymentByUserIdAndExpenseId = new GetPaymentByUserIdAndExpenseId(resource.userId(), resource.expenseId());
+        var getPaymentByUserIdAndExpenseId = new GetPaymentByUserInformationIdAndExpenseId(resource.userId(), resource.expenseId());
         var payment = paymentQueryService.handle(getPaymentByUserIdAndExpenseId);
         if(payment.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -62,7 +62,7 @@ public class PaymentController {
 
     @GetMapping("/userId/{userId}")
     public ResponseEntity<List<PaymentResource>> getPaymentByUserId(@PathVariable Long userId) {
-        var getAllPaymentsByUserIdQuery = new GetAllPaymentsByUserIdQuery(userId);
+        var getAllPaymentsByUserIdQuery = new GetAllPaymentsByUserInformationIdQuery(userId);
         var payments = paymentQueryService.handle(getAllPaymentsByUserIdQuery);
         if (payments.isEmpty()){return ResponseEntity.notFound().build();}
         var paymentResources = payments.stream().map(PaymentResourceFromEntityAssembler::toResourceFromEntity).toList();

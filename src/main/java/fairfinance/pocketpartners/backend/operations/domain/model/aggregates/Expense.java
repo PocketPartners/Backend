@@ -4,7 +4,7 @@ import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
 import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.Amount;
 import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -25,17 +25,17 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @Getter
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
-
+    private UserInformation userInformationId;
+  
     @Getter
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
 
-    public Expense(String name, BigDecimal amount, User user, Group group){
+    public Expense(String name, BigDecimal amount, UserInformation userInformation, Group group){
         this.name = new ExpenseName(name);
         this.amount = new Amount(amount);
-        this.user = user;
+        this.userInformationId = userInformation;
         this.group = group;
     }
 
@@ -61,4 +61,5 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
 
     public BigDecimal getAmount(){return amount.getAmount();}
 
+    public Long getUserId(){return userInformationId.getId();}
 }

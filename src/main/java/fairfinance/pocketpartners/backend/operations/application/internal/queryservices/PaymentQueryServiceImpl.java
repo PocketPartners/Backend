@@ -29,8 +29,8 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     }
 
     @Override
-    public List<Payment> handle(GetAllPaymentsByUserIdQuery query){
-        return paymentRepository.findAllByUserId(query.userId());
+    public List<Payment> handle(GetAllPaymentsByUserInformationIdQuery query){
+        return paymentRepository.findAllByUserInformationId(query.userInformationId());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     }
 
     @Override
-    public Optional<Payment> handle(GetPaymentByUserIdAndExpenseId query){
-        return paymentRepository.findByUserIdAndExpenseId(query.userId(), query.expenseId());
+    public Optional<Payment> handle(GetPaymentByUserInformationIdAndExpenseId query){
+        return paymentRepository.findByUserInformationIdAndExpenseId(query.userInformationId(), query.expenseId());
     }
 }
