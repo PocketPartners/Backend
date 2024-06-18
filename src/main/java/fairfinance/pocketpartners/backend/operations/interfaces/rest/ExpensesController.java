@@ -36,7 +36,7 @@ public class ExpensesController {
     public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
         var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
         var expenseId = expenseCommandService.handle(createExpenseCommand);
-        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserIdQuery(new ExpenseName(resource.name()), resource.userId());
+        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserInformationIdQuery(new ExpenseName(resource.name()), resource.userId());
         var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
@@ -54,7 +54,7 @@ public class ExpensesController {
 
     @GetMapping("/userId/{userId}")
     public ResponseEntity<List<ExpenseResource>> getExpensesByUserId(@PathVariable Long userId) {
-        var getAllExpensesByUserIdQuery = new GetAllExpensesByUserIdQuery(userId);
+        var getAllExpensesByUserIdQuery = new GetAllExpensesByUserInformationIdQuery(userId);
         var expenses = expenseQueryService.handle(getAllExpensesByUserIdQuery);
         if (expenses.isEmpty()) {return ResponseEntity.badRequest().build();}
         var expenseResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).toList();

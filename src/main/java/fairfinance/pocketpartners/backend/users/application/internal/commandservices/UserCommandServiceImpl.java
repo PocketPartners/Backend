@@ -3,6 +3,7 @@ package fairfinance.pocketpartners.backend.users.application.internal.commandser
 import fairfinance.pocketpartners.backend.users.application.internal.outboundservices.hashing.HashingService;
 import fairfinance.pocketpartners.backend.users.application.internal.outboundservices.tokens.TokenService;
 import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
+import fairfinance.pocketpartners.backend.users.domain.model.commands.DeleteUserCommand;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.SignInCommand;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.SignUpCommand;
 import fairfinance.pocketpartners.backend.users.domain.services.UserCommandService;
@@ -27,23 +28,6 @@ public class UserCommandServiceImpl implements UserCommandService {
         this.hashingService = hashingService;
         this.tokenService = tokenService;
         this.roleRepository = roleRepository;
-    }
-    
-    /**
-     * Handles the creation of a new user.
-     * @param command CreateUserCommand object containing the user's details.
-     * @return Optional<User> Newly created user.
-     * @throws IllegalArgumentException if a user with the same email already exists.
-     */
-    @Override
-    public Optional<User> handle(CreateUserCommand command) {
-        var emailAddress = new EmailAddress(command.email());
-        userRepository.findByEmail(emailAddress).map(user -> {
-            throw new IllegalArgumentException("User with email " + command.email() + " already exists");
-        });
-        var user = new User(command);
-        userRepository.save(user);
-        return Optional.of(user);
     }
   
     /**

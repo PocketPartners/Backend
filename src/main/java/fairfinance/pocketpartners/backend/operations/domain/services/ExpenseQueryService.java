@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ExpenseQueryService {
     List<Expense> handle(GetAllExpensesQuery query);
     Optional<Expense> handle(GetExpenseByIdQuery query);
-    List<Expense> handle(GetAllExpensesByUserIdQuery query);
-    Optional<Expense> handle(GetExpenseByNameAndUserIdQuery query);
+    List<Expense> handle(GetAllExpensesByUserInformationIdQuery query);
+    Optional<Expense> handle(GetExpenseByNameAndUserInformationIdQuery query);
     List<Expense> handle(GetAllExpensesByGroupIdQuery query);
 }

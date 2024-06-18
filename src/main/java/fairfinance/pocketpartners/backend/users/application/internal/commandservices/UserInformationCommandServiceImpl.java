@@ -1,5 +1,6 @@
 package fairfinance.pocketpartners.backend.users.application.internal.commandservices;
 
+import fairfinance.pocketpartners.backend.users.domain.model.aggregates.User;
 import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.CreateUserInformationCommand;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.DeleteUserInformationCommand;
@@ -7,7 +8,6 @@ import fairfinance.pocketpartners.backend.users.domain.model.commands.UpdateUser
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.EmailAddress;
 import fairfinance.pocketpartners.backend.users.domain.services.UserInformationCommandService;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,6 +21,12 @@ public class UserInformationCommandServiceImpl implements UserInformationCommand
         this.userInformationRepository = userInformationRepository;
     }
 
+    /**
+     * Handles the creation of a new user.
+     * @param command CreateUserCommand object containing the user's details.
+     * @return Optional<User> Newly created user.
+     * @throws IllegalArgumentException if a user with the same email already exists.
+     */
     @Override
     public Optional<UserInformation> handle(CreateUserInformationCommand command) {
         var emailAddress = new EmailAddress(command.email());
@@ -31,6 +37,7 @@ public class UserInformationCommandServiceImpl implements UserInformationCommand
         userInformationRepository.save(userInformation);
         return Optional.of(userInformation);
     }
+
 
     @Override
     public Optional<UserInformation> handle(DeleteUserInformationCommand command) {
