@@ -28,7 +28,36 @@ public class UserCommandServiceImpl implements UserCommandService {
         this.tokenService = tokenService;
         this.roleRepository = roleRepository;
     }
-
+    
+    /**
+     * Handles the creation of a new user.
+     * @param command CreateUserCommand object containing the user's details.
+     * @return Optional<User> Newly created user.
+     * @throws IllegalArgumentException if a user with the same email already exists.
+     */
+    @Override
+    public Optional<User> handle(CreateUserCommand command) {
+        var emailAddress = new EmailAddress(command.email());
+        userRepository.findByEmail(emailAddress).map(user -> {
+            throw new IllegalArgumentException("User with email " + command.email() + " already exists");
+        });
+        var user = new User(command);
+        userRepository.save(user);
+        return Optional.of(user);
+    }
+  
+    /**
+     * Handles the deletion of a user.
+     * @param command DeleteUserCommand object containing the user's ID.
+     * @return Optional<User> Deleted user.
+     */
+    @Override
+    public Optional<User> handle(DeleteUserCommand command) {
+        var user = userRepository.findById(command.userId());
+        user.ifPresent(userRepository::delete);
+        return user;
+    }
+  
     /**
      * Handle the sign-in command
      * <p>
@@ -50,12 +79,9 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     /**
-     * Handle the sign-up command
-     * <p>
-     *     This method handles the {@link SignUpCommand} command and returns the user.
-     * </p>
-     * @param command the sign-up command containing the username and password
-     * @return the created user
+     * Handles the updating of a user's details.
+     * @param command UpdateUserCommand object containing the user's updated details.
+     * @return Optional<User> Updated user.
      */
     @Override
     public Optional<User> handle(SignUpCommand command) {
@@ -66,4 +92,5 @@ public class UserCommandServiceImpl implements UserCommandService {
         userRepository.save(user);
         return userRepository.findByUsername(command.username());
     }
+
 }

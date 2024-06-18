@@ -1,9 +1,7 @@
 package fairfinance.pocketpartners.backend.operations.application.internal.queryservices;
 
 import fairfinance.pocketpartners.backend.operations.domain.model.aggregates.Expense;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.*;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseQueryService;
 import fairfinance.pocketpartners.backend.operations.infrastructure.persistence.jpa.repositories.ExpenseRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,17 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
     }
 
     @Override
-    public Optional<Expense> handle(GetExpenseByNameAndUserId query){
+    public List<Expense> handle(GetAllExpensesByUserIdQuery query) {
+        return expenseRepository.findByUserId(query.userId());
+    }
+
+    @Override
+    public Optional<Expense> handle(GetExpenseByNameAndUserIdQuery query){
         return expenseRepository.findByNameAndId(query.expenseName(), query.userId());
+    }
+
+    @Override
+    public List<Expense> handle(GetAllExpensesByGroupIdQuery query){
+        return expenseRepository.findByGroupId(query.groupId());
     }
 }

@@ -1,8 +1,6 @@
 package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllExpensesQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetExpenseByNameAndUserId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.*;
 import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.ExpenseName;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.ExpenseQueryService;
@@ -22,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/v1/expenses", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name="Expenses", description = "Expenses Management Endpoints")
 public class ExpensesController {
@@ -39,7 +36,7 @@ public class ExpensesController {
     public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
         var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
         var expenseId = expenseCommandService.handle(createExpenseCommand);
-        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserId(new ExpenseName(resource.name()), resource.userId());
+        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserIdQuery(new ExpenseName(resource.name()), resource.userId());
         var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
@@ -53,6 +50,15 @@ public class ExpensesController {
         if (expense.isEmpty()) return ResponseEntity.badRequest().build();
         var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
         return ResponseEntity.ok(expenseResource);
+    }
+
+    @GetMapping("/userId/{userId}")
+    public ResponseEntity<List<ExpenseResource>> getExpensesByUserId(@PathVariable Long userId) {
+        var getAllExpensesByUserIdQuery = new GetAllExpensesByUserIdQuery(userId);
+        var expenses = expenseQueryService.handle(getAllExpensesByUserIdQuery);
+        if (expenses.isEmpty()) {return ResponseEntity.badRequest().build();}
+        var expenseResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(expenseResources);
     }
 
     @GetMapping
@@ -72,4 +78,12 @@ public class ExpensesController {
         return ResponseEntity.ok(expenseResource);
     }
 
+    @GetMapping("/groupId/{groupId}")
+    public ResponseEntity<List<ExpenseResource>> getExpensesByGroupId(@PathVariable Long groupId) {
+        var getAllExpensesByGroupIdQuery = new GetAllExpensesByGroupIdQuery(groupId);
+        var expenses = expenseQueryService.handle(getAllExpensesByGroupIdQuery);
+        if (expenses.isEmpty()) {return ResponseEntity.badRequest().build();}
+        var expenseResources = expenses.stream().map(ExpenseResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(expenseResources);
+    }
 }

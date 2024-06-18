@@ -1,15 +1,14 @@
 package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.CompletePaymentCommand;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByExpenseIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByUserInformationIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetPaymentByUserInformationIdAndExpenseId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.*;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentQueryService;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.CreatePaymentResource;
+import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.ExpenseResource;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.PaymentResource;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.transform.CreatePaymentCommandFromResourceAssembler;
+import fairfinance.pocketpartners.backend.operations.interfaces.rest.transform.ExpenseResourceFromEntityAssembler;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.transform.PaymentResourceFromEntityAssembler;
 import fairfinance.pocketpartners.backend.shared.interfaces.rest.resources.MessageResource;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "api/v1/payments", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name="Payments", description = "Payments Management Endpoint")
 public class PaymentController {
@@ -79,4 +77,14 @@ public class PaymentController {
         var paymentResources = payments.stream().map(PaymentResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(paymentResources);
     }
+
+    @GetMapping("/{paymentId}")
+    public ResponseEntity<PaymentResource> getPaymentById(@PathVariable Long paymentId) {
+        var getPaymentByIdQuery = new GetPaymentByIdQuery(paymentId);
+        var payment = paymentQueryService.handle(getPaymentByIdQuery);
+        if (payment.isEmpty()) return ResponseEntity.badRequest().build();
+        var paymentResource = PaymentResourceFromEntityAssembler.toResourceFromEntity(payment.get());
+        return ResponseEntity.ok(paymentResource);
+    }
+
 }

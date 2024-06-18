@@ -1,5 +1,7 @@
 package fairfinance.pocketpartners.backend.operations.application.internal.commandservices;
 
+import fairfinance.pocketpartners.backend.groups.domain.model.aggregates.Group;
+import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupRepository;
 import fairfinance.pocketpartners.backend.operations.domain.model.aggregates.Expense;
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.CreateExpenseCommand;
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.UpdateExpenseCommand;
@@ -16,19 +18,23 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
 
     private final ExpenseRepository expenseRepository;
     private final UserInformationRepository userInformationRepository;
+    private final GroupRepository groupRepository;
 
-    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserInformationRepository userInformationRepository) {
+    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository, UserInformationRepository userInformationRepository, GroupRepository groupRepository) {
         this.expenseRepository = expenseRepository;
         this.userInformationRepository = userInformationRepository;
+        this.groupRepository = groupRepository;
     }
 
     @Override
     public Long handle(CreateExpenseCommand command) {
         Optional<UserInformation> user = userInformationRepository.findById(command.userId());
+        Optional<Group> group = groupRepository.findById(command.groupId());
+
         if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
-        Expense expense = new Expense(command.name(), command.amount(), user.get());
+        Expense expense = new Expense(command.name(), command.amount(), user.get(), group.get());
         expenseRepository.save(expense);
         return expense.getId();
     }
