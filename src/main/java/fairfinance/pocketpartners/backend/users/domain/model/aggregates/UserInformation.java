@@ -21,7 +21,7 @@ public class UserInformation extends AuditableAbstractAggregateRoot<UserInformat
     @Getter
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private UserInformation userInformation;
+    private User user;
 
     @NotBlank
     @Embedded

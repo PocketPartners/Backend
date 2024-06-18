@@ -17,10 +17,6 @@ import java.util.Set;
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
 
-    @Getter
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserInformation userInformation;
-
     @NotBlank
     @Size(max = 50)
     @Column(unique = true)

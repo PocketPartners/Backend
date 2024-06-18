@@ -1,7 +1,6 @@
 package fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.services;
 
 import fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.model.UserDetailsImpl;
-import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

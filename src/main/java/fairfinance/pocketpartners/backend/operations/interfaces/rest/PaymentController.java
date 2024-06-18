@@ -2,9 +2,9 @@ package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.CompletePaymentCommand;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByExpenseIdQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByUserIdQuery;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsByUserInformationIdQuery;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetAllPaymentsQuery;
-import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetPaymentByUserIdAndExpenseId;
+import fairfinance.pocketpartners.backend.operations.domain.model.queries.GetPaymentByUserInformationIdAndExpenseId;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentQueryService;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.CreatePaymentResource;
@@ -38,7 +38,7 @@ public class PaymentController {
         var command = CreatePaymentCommandFromResourceAssembler.toCommandFromResource(resource);
         var paymentId = paymentCommandService.handle(command);
         System.out.println("Payment ID: " + paymentId);
-        var getPaymentByUserIdAndExpenseId = new GetPaymentByUserIdAndExpenseId(resource.userId(), resource.expenseId());
+        var getPaymentByUserIdAndExpenseId = new GetPaymentByUserInformationIdAndExpenseId(resource.userId(), resource.expenseId());
         var payment = paymentQueryService.handle(getPaymentByUserIdAndExpenseId);
         if(payment.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -64,7 +64,7 @@ public class PaymentController {
 
     @GetMapping("/userId/{userId}")
     public ResponseEntity<List<PaymentResource>> getPaymentByUserId(@PathVariable Long userId) {
-        var getAllPaymentsByUserIdQuery = new GetAllPaymentsByUserIdQuery(userId);
+        var getAllPaymentsByUserIdQuery = new GetAllPaymentsByUserInformationIdQuery(userId);
         var payments = paymentQueryService.handle(getAllPaymentsByUserIdQuery);
         if (payments.isEmpty()){return ResponseEntity.notFound().build();}
         var paymentResources = payments.stream().map(PaymentResourceFromEntityAssembler::toResourceFromEntity).toList();

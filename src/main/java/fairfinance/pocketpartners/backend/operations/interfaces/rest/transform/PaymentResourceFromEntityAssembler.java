@@ -5,6 +5,6 @@ import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.P
 
 public class PaymentResourceFromEntityAssembler {
     public static PaymentResource toResourceFromEntity(Payment payment) {
-        return new PaymentResource(payment.getId(), payment.getDescription(), payment.getAmount(), payment.getStatus(), payment.getUser().getUserInformation().getId(), payment.getExpense().getId());
+        return new PaymentResource(payment.getId(), payment.getDescription(), payment.getAmount(), payment.getStatus(), payment.getUserInformation().getId(), payment.getExpense().getId());
     }
 }
