@@ -3,6 +3,7 @@ package fairfinance.pocketpartners.backend.users.application.internal.queryservi
 import fairfinance.pocketpartners.backend.users.domain.model.aggregates.UserInformation;
 import fairfinance.pocketpartners.backend.users.domain.model.queries.GetAllUsersInformationQuery;
 import fairfinance.pocketpartners.backend.users.domain.model.queries.GetUserInformationByIdQuery;
+import fairfinance.pocketpartners.backend.users.domain.model.queries.GetUserInformationByUserIdQuery;
 import fairfinance.pocketpartners.backend.users.domain.services.UserInformationQueryService;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class UserInformationQueryServiceImpl implements UserInformationQueryServ
     @Override
     public Optional<UserInformation> handle(GetUserInformationByIdQuery query) {
         return userInformationRepository.findById(query.userId());
+    }
+
+    @Override
+    public Optional<UserInformation> handle(GetUserInformationByUserIdQuery query) {
+        return userInformationRepository.findByUserId(query.id());
     }
 }

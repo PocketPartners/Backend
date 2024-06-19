@@ -3,6 +3,7 @@ package fairfinance.pocketpartners.backend.users.interfaces.rest;
 import fairfinance.pocketpartners.backend.users.domain.model.commands.DeleteUserInformationCommand;
 import fairfinance.pocketpartners.backend.users.domain.model.queries.GetAllUsersInformationQuery;
 import fairfinance.pocketpartners.backend.users.domain.model.queries.GetUserInformationByIdQuery;
+import fairfinance.pocketpartners.backend.users.domain.model.queries.GetUserInformationByUserIdQuery;
 import fairfinance.pocketpartners.backend.users.domain.services.UserInformationCommandService;
 import fairfinance.pocketpartners.backend.users.domain.services.UserInformationQueryService;
 import fairfinance.pocketpartners.backend.users.interfaces.rest.resources.CreateUserInformationResource;
@@ -63,6 +64,21 @@ public class UsersInformationController {
     public ResponseEntity<UserInformationResource> getProfileById(@PathVariable Long userInformationId) {
         var getUserInformationByIdQuery = new GetUserInformationByIdQuery(userInformationId);
         var userInformation = userInformationQueryService.handle(getUserInformationByIdQuery);
+        if (userInformation.isEmpty()) return ResponseEntity.badRequest().build();
+        var profileResource = UserInformationResourceFromEntityAssembler.toResourceFromEntity(userInformation.get());
+        return ResponseEntity.ok(profileResource);
+    }
+
+    @Operation(summary = "Get user information by User ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User information found"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "User information not found")
+    })
+    @GetMapping("/userId/{userId}")
+    public ResponseEntity<UserInformationResource> getProfileByUserId(@PathVariable Long userId) {
+        var getUserInformationByUserIdQuery = new GetUserInformationByUserIdQuery(userId);
+        var userInformation = userInformationQueryService.handle(getUserInformationByUserIdQuery);
         if (userInformation.isEmpty()) return ResponseEntity.badRequest().build();
         var profileResource = UserInformationResourceFromEntityAssembler.toResourceFromEntity(userInformation.get());
         return ResponseEntity.ok(profileResource);
