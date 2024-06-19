@@ -6,5 +6,6 @@ public record UserInformationResource(Long id,
                                       String fullName,
                                       String phoneNumber,
                                       String photo,
-                                      String email) {
+                                      String email,
+                                      Long userId) {
 }

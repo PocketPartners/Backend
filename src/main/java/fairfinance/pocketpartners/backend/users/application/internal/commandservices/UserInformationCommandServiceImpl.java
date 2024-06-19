@@ -8,6 +8,7 @@ import fairfinance.pocketpartners.backend.users.domain.model.commands.UpdateUser
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.EmailAddress;
 import fairfinance.pocketpartners.backend.users.domain.services.UserInformationCommandService;
 import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserInformationRepository;
+import fairfinance.pocketpartners.backend.users.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,9 +17,11 @@ import java.util.Optional;
 public class UserInformationCommandServiceImpl implements UserInformationCommandService {
 
     private final UserInformationRepository userInformationRepository;
+    private final UserRepository userRepository;
 
-    public UserInformationCommandServiceImpl(UserInformationRepository userInformationRepository) {
+    public UserInformationCommandServiceImpl(UserInformationRepository userInformationRepository, UserRepository userRepository) {
         this.userInformationRepository = userInformationRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -33,7 +36,8 @@ public class UserInformationCommandServiceImpl implements UserInformationCommand
         userInformationRepository.findByEmail(emailAddress).map(user -> {
             throw new IllegalArgumentException("User with email " + command.email() + " already exists");
         });
-        var userInformation = new UserInformation(command);
+        Optional<User> userId = userRepository.findById(command.userId());
+        var userInformation = new UserInformation(command.firstName(), command.lastName(), command.phoneNumber(), command.photo(), command.email(), userId.get());
         userInformationRepository.save(userInformation);
         return Optional.of(userInformation);
     }

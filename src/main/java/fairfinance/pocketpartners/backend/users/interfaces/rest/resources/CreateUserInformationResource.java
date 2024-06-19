@@ -5,5 +5,5 @@ public record CreateUserInformationResource(String firstName,
                                             String phoneNumber,
                                             String photo,
                                             String email,
-                                            String password) {
+                                            Long userId) {
 }

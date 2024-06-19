@@ -23,7 +23,7 @@ public class UserInformation extends AuditableAbstractAggregateRoot<UserInformat
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank
+    //@NotBlank
     @Embedded
     private PersonName name;
 
@@ -33,16 +33,17 @@ public class UserInformation extends AuditableAbstractAggregateRoot<UserInformat
     @Embedded
     private Photo photo;
 
-    @NotBlank
+    //@NotBlank
     @Embedded
     EmailAddress email;
 
 
-    public UserInformation(String firstName, String lastName, String phoneNumber, String photo, String email) {
+    public UserInformation(String firstName, String lastName, String phoneNumber, String photo, String email, User user) {
         this.name = new PersonName(firstName, lastName);
         this.phoneNumber = new PhoneNumber(phoneNumber);
         this.photo = new Photo(photo);
         this.email = new EmailAddress(email);
+        this.user = user;
     }
 
     public UserInformation(CreateUserInformationCommand command) {
@@ -50,6 +51,7 @@ public class UserInformation extends AuditableAbstractAggregateRoot<UserInformat
         this.phoneNumber = new PhoneNumber(command.phoneNumber());
         this.photo = new Photo(command.photo());
         this.email = new EmailAddress(command.email());
+        this.user = new User();
     }
 
     public UserInformation() {

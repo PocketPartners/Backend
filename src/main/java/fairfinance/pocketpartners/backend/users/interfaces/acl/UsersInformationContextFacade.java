@@ -16,8 +16,8 @@ public class UsersInformationContextFacade {
         this.userInformationCommandService = userInformationCommandService;
     }
 
-    public Long createUser(String firstName, String lastName,String phoneNumber,String photo, String email, String password) {
-        var createProfileCommand = new CreateUserInformationCommand(firstName, lastName, phoneNumber,photo, email, password);
+    public Long createUser(String firstName, String lastName,String phoneNumber,String photo, String email, Long userId) {
+        var createProfileCommand = new CreateUserInformationCommand(firstName, lastName, phoneNumber,photo, email, userId);
         var user = userInformationCommandService.handle(createProfileCommand);
         if (user.isEmpty()) return 0L;
         return user.get().getId();
