@@ -27,7 +27,7 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
     }
 
     @Override
-    public Long handle(CreateExpenseCommand command) {
+    public Optional<Expense> handle(CreateExpenseCommand command) {
         Optional<UserInformation> user = userInformationRepository.findById(command.userId());
         Optional<Group> group = groupRepository.findById(command.groupId());
 
@@ -36,7 +36,7 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
         }
         Expense expense = new Expense(command.name(), command.amount(), user.get(), group.get());
         expenseRepository.save(expense);
-        return expense.getId();
+        return expenseRepository.findById(expense.getId());
     }
 
     @Override

@@ -36,10 +36,11 @@ public class ExpensesController {
     public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
         var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
         var expenseId = expenseCommandService.handle(createExpenseCommand);
-        var getExpenseByNameAndUserId = new GetExpenseByNameAndUserInformationIdQuery(new ExpenseName(resource.name()), resource.userId());
-        var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
-        if (expense.isEmpty()) return ResponseEntity.badRequest().build();
-        var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
+        //var getExpenseByNameAndUserId = new GetExpenseByNameAndUserInformationIdQuery(new ExpenseName(resource.name()), resource.userId());
+        //var expense = expenseQueryService.handle(getExpenseByNameAndUserId);
+        //if (expense.isEmpty()) return ResponseEntity.badRequest().build();
+        if (expenseId.isEmpty()) return ResponseEntity.badRequest().build();
+        var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expenseId.get());
         return new ResponseEntity<>(expenseResource, HttpStatus.CREATED);
     }
 

@@ -7,6 +7,6 @@ import fairfinance.pocketpartners.backend.operations.domain.model.commands.Updat
 import java.util.Optional;
 
 public interface ExpenseCommandService {
-    Long handle(CreateExpenseCommand command);
+    Optional<Expense> handle(CreateExpenseCommand command);
     Optional<Expense> handle(UpdateExpenseCommand command);
 }

@@ -13,6 +13,7 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+@Getter
 @Entity
 public class Expense extends AuditableAbstractAggregateRoot<Expense> {
 
@@ -22,12 +23,10 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @Embedded
     private Amount amount;
 
-    @Getter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserInformation userInformation;
   
-    @Getter
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
