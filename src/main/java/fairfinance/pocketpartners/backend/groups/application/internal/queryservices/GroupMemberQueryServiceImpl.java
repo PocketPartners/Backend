@@ -1,6 +1,7 @@
 package fairfinance.pocketpartners.backend.groups.application.internal.queryservices;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.entities.GroupMember;
+import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllGroupsOfUserById;
 import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllMembersInGroupQuery;
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupMemberQueryService;
 import fairfinance.pocketpartners.backend.groups.infrastructure.persistence.jpa.repositories.GroupMemberRepository;
@@ -20,5 +21,10 @@ public class GroupMemberQueryServiceImpl implements GroupMemberQueryService {
     @Override
     public List<GroupMember> handle(GetAllMembersInGroupQuery query) {
         return groupMemberRepository.findAllByGroupId(query.groupId());
+    }
+
+    @Override
+    public List<GroupMember> handle(GetAllGroupsOfUserById query) {
+        return groupMemberRepository.findAllByUserInformationUserId(query.userId());
     }
 }

@@ -2,6 +2,7 @@ package fairfinance.pocketpartners.backend.groups.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.groups.domain.model.commands.CreateGroupMemberCommand;
 import fairfinance.pocketpartners.backend.groups.domain.model.entities.GroupMember;
+import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllGroupsOfUserById;
 import fairfinance.pocketpartners.backend.groups.domain.model.queries.GetAllMembersInGroupQuery;
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupMemberCommandService;
 import fairfinance.pocketpartners.backend.groups.domain.services.GroupMemberQueryService;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "api/v1/groups/{groupId}/members")
+@RequestMapping(value = "api/v1/groups")
 @Tag(name = "Member Group", description = "Member Group Management Endpoints")
 public class GroupMemberController {
     private final GroupMemberCommandService groupMemberCommand;
@@ -26,14 +27,23 @@ public class GroupMemberController {
         this.groupMemberQuery = groupMemberQuery;
     }
 
-    @PostMapping("{userId}")
+    @GetMapping("members/{userId}")
+    public ResponseEntity<List<Object>> getGroupsByUserId(@PathVariable Long userId) {
+        var groupMembers = groupMemberQuery.handle(new GetAllGroupsOfUserById(userId));
+        if (groupMembers.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(groupMembers.stream().map(GroupMemberResource::fromCommandToResource).collect(Collectors.toList()));
+    }
+
+    @PostMapping("{groupId}/members{userId}")
     public ResponseEntity<GroupMember> joinGroup(@PathVariable Long groupId, @PathVariable Long userId) {
         var createGroupMemberCommand = new CreateGroupMemberCommand(groupId, userId);
         var groupMember = groupMemberCommand.handle(createGroupMemberCommand);
         return groupMember.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @GetMapping
+    @GetMapping("{groupId}/members")
     public ResponseEntity<List<Object>> getGroupMembers(@PathVariable Long groupId) {
         var groupMembers = groupMemberQuery.handle(new GetAllMembersInGroupQuery(groupId));
         if (groupMembers.isEmpty()) {
