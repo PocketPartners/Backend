@@ -1,7 +1,6 @@
 package fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.configuration;
 
 import fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
-import fairfinance.pocketpartners.backend.users.infrastructure.authorization.sfs.services.UserDetailsServiceImpl;
 import fairfinance.pocketpartners.backend.users.infrastructure.hashing.bcypt.BCryptHashingService;
 import fairfinance.pocketpartners.backend.users.infrastructure.tokens.jwt.BearerTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,17 +11,30 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 
+/**
+ * Web Security Configuration.
+ * <p>
+ * This class is responsible for configuring the web security.
+ * It enables the method security and configures the security filter chain.
+ * It includes the authentication manager, the authentication provider, the password encoder and the authentication entry point.
+ * </p>
+ */
 @Configuration
 @EnableMethodSecurity
-public class    WebSecurityConfiguration {
+public class WebSecurityConfiguration {
 
     private final UserDetailsService userDetailsService;
 
@@ -81,6 +93,13 @@ public class    WebSecurityConfiguration {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors(configurer -> configurer.configurationSource(_ -> {
+            var cors = new CorsConfiguration();
+            cors.setAllowedOrigins(List.of("*"));
+            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+            cors.setAllowedHeaders(List.of("*"));
+            return cors;
+        }));
         http.csrf(csrfConfigurer -> csrfConfigurer.disable())
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedRequestHandler))
                 .sessionManagement( customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
