@@ -2,10 +2,7 @@ package fairfinance.pocketpartners.backend.users.domain.model.entities;
 
 import fairfinance.pocketpartners.backend.users.domain.model.valueobjects.Roles;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.*;
 
 import java.util.List;
 
@@ -20,6 +17,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @With
 public class Role {
     @Id
