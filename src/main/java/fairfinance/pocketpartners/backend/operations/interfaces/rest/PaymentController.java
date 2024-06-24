@@ -85,7 +85,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentResource);
     }
 
-    @GetMapping("/userId/{userId}/status{status}")
+    @GetMapping("/userId/{userId}/status/{status}")
     public ResponseEntity<List<PaymentResource>> getPaymentByGroupIdAndUserIdAndStatus(@PathVariable Long userId, @PathVariable Long status) {
         var getAllPaymentsByUserIdAndStatusQuery = new GetAllPaymentsByUserIdAndStatusQuery(userId, status);
         var payments = paymentQueryService.handle(getAllPaymentsByUserIdAndStatusQuery);
