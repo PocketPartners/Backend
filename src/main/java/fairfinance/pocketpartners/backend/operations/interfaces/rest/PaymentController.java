@@ -2,6 +2,7 @@ package fairfinance.pocketpartners.backend.operations.interfaces.rest;
 
 import fairfinance.pocketpartners.backend.operations.domain.model.commands.CompletePaymentCommand;
 import fairfinance.pocketpartners.backend.operations.domain.model.queries.*;
+import fairfinance.pocketpartners.backend.operations.domain.model.valueobjects.PaymentStatus;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentQueryService;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.CreatePaymentResource;
@@ -86,7 +87,7 @@ public class PaymentController {
     }
 
     @GetMapping("/userId/{userId}/status/{status}")
-    public ResponseEntity<List<PaymentResource>> getPaymentByGroupIdAndUserIdAndStatus(@PathVariable Long userId, @PathVariable Long status) {
+    public ResponseEntity<List<PaymentResource>> getPaymentByGroupIdAndUserIdAndStatus(@PathVariable Long userId, @PathVariable PaymentStatus status) {
         var getAllPaymentsByUserIdAndStatusQuery = new GetAllPaymentsByUserIdAndStatusQuery(userId, status);
         var payments = paymentQueryService.handle(getAllPaymentsByUserIdAndStatusQuery);
         if (payments.isEmpty()){return ResponseEntity.notFound().build();}
