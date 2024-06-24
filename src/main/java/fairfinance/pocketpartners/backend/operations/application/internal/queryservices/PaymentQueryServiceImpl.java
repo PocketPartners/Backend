@@ -42,4 +42,9 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     public Optional<Payment> handle(GetPaymentByUserInformationIdAndExpenseId query){
         return paymentRepository.findByUserInformationIdAndExpenseId(query.userInformationId(), query.expenseId());
     }
+
+    @Override
+    public List<Payment> handle(GetAllPaymentsByUserIdAndStatusQuery query){
+        return paymentRepository.findAllByUserInformationIdAndStatus(query.userInformationId(), query.status());
+    }
 }

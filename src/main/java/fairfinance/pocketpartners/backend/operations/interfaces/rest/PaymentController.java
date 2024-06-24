@@ -5,10 +5,8 @@ import fairfinance.pocketpartners.backend.operations.domain.model.queries.*;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentCommandService;
 import fairfinance.pocketpartners.backend.operations.domain.services.PaymentQueryService;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.CreatePaymentResource;
-import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.ExpenseResource;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.resources.PaymentResource;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.transform.CreatePaymentCommandFromResourceAssembler;
-import fairfinance.pocketpartners.backend.operations.interfaces.rest.transform.ExpenseResourceFromEntityAssembler;
 import fairfinance.pocketpartners.backend.operations.interfaces.rest.transform.PaymentResourceFromEntityAssembler;
 import fairfinance.pocketpartners.backend.shared.interfaces.rest.resources.MessageResource;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -87,4 +85,12 @@ public class PaymentController {
         return ResponseEntity.ok(paymentResource);
     }
 
+    @GetMapping("/userId/{userId}/status{status}")
+    public ResponseEntity<List<PaymentResource>> getPaymentByGroupIdAndUserIdAndStatus(@PathVariable Long userId, @PathVariable Long status) {
+        var getAllPaymentsByUserIdAndStatusQuery = new GetAllPaymentsByUserIdAndStatusQuery(userId, status);
+        var payments = paymentQueryService.handle(getAllPaymentsByUserIdAndStatusQuery);
+        if (payments.isEmpty()){return ResponseEntity.notFound().build();}
+        var paymentResources = payments.stream().map(PaymentResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(paymentResources);
+    }
 }
